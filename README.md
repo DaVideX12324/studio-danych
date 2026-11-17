@@ -120,7 +120,3 @@ różnych plikach CSV i z regułą z linii poleceń.
 - Wzorzec `DataSession` z instrukcji projektu (kod inspiracyjny).
 - Narzędzie AI: Claude (Anthropic), pomoc przy projekcie struktury, kodzie i testach; kod został przejrzany
   i jest rozumiany przez autora.
-
-## Autor
-
-_uzupełnić_
