@@ -1,0 +1,22 @@
+{
+  "missing_tokens": ["", "?", "-", "--", "brak", "brak danych", "nieznane", "error", "do sprawdzenia", "na", "n/a", "nan", "null", "none"],
+  "range_rules": [],
+  "outliers": {
+    "factor": 1.5,
+    "columns": "numeric"
+  },
+  "steps": [
+    {"op": "drop_duplicates",
+     "why": "Pełne duplikaty (wszystkie kolumny identyczne) to powtórzone rekordy; zostaje pierwsze wystąpienie."},
+    {"op": "missing_tokens",
+     "why": "Tekstowe oznaczenia braku zamieniamy na NaN, żeby kolumny z liczbami miały typ liczbowy."},
+    {"op": "range_rules",
+     "why": "Reguły zakresu podane przez użytkownika (opcja --range). Domyślna akcja flag tylko oznacza rekordy, nie zmienia danych."},
+    {"op": "fill_missing", "params": {"columns": "numeric", "strategy": "median"},
+     "why": "Braki liczbowe: mediana, bo jest odporna na wartości odstające."},
+    {"op": "fill_missing", "params": {"columns": "text", "strategy": "mode"},
+     "why": "Braki tekstowe: najczęstsza wartość w kolumnie."},
+    {"op": "outliers", "params": {"action": "flag"},
+     "why": "Wartości odstające (IQR x 1,5) tylko oznaczamy w kolumnach <nazwa>_outlier; bez wiedzy o danych nie wiadomo, czy to błąd."}
+  ]
+}

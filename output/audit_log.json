@@ -1,0 +1,484 @@
+[
+  {
+    "step": 1,
+    "operation": "drop_duplicates",
+    "params": {},
+    "timestamp": "2026-11-17T12:34:03",
+    "rows_before": 20840,
+    "rows_after": 20640,
+    "affected_rows": 200,
+    "changed_cells": {},
+    "added_columns": [],
+    "details": "klucz: wszystkie kolumny; usunięto 200",
+    "reason": "Pełne duplikaty (identyczne wszystkie kolumny) to powtórzone rekordy; zostaje pierwsze wystąpienie. Robione na danych surowych, żeby nie scalać rekordów różniących się tylko zapisem braku."
+  },
+  {
+    "step": 2,
+    "operation": "normalize_missing_tokens",
+    "params": {
+      "tokens": [
+        "",
+        "?",
+        "--",
+        "brak",
+        "nieznane",
+        "error",
+        "do sprawdzenia",
+        "na",
+        "n/a",
+        "null"
+      ]
+    },
+    "timestamp": "2026-11-17T12:34:03",
+    "rows_before": 20640,
+    "rows_after": 20640,
+    "affected_rows": 24,
+    "changed_cells": {
+      "MedInc": 6,
+      "HouseAge": 6,
+      "Population": 6,
+      "MedHouseVal": 6
+    },
+    "added_columns": [],
+    "details": "tokeny: ['', '--', '?', 'brak', 'do sprawdzenia', 'error', 'n/a', 'na', 'nieznane', 'null']; zamienione na liczby: MedInc, HouseAge, Population, MedHouseVal",
+    "reason": "Teksty typu '?', 'brak', 'error' w kolumnach liczbowych oznaczają brak wartości; zamiana na NaN pozwala potraktować kolumnę jako liczbową."
+  },
+  {
+    "step": 3,
+    "operation": "apply_range_rule",
+    "params": {
+      "rule": {
+        "column": "MedInc",
+        "min": 0,
+        "max": 15.0001,
+        "include_min": false,
+        "include_max": true,
+        "action": "nan"
+      }
+    },
+    "timestamp": "2026-11-17T12:34:03",
+    "rows_before": 20640,
+    "rows_after": 20640,
+    "affected_rows": 30,
+    "changed_cells": {
+      "MedInc": 30
+    },
+    "added_columns": [],
+    "details": "0 < MedInc ≤ 15.0001: naruszeń 30, akcja nan",
+    "reason": "Akcja nan: wartość fizycznie niemożliwa to błąd zapisu, więc traktujemy ją jak brak informacji i obsługujemy jak pozostałe braki, zamiast usuwać cały rekord."
+  },
+  {
+    "step": 4,
+    "operation": "apply_range_rule",
+    "params": {
+      "rule": {
+        "column": "HouseAge",
+        "min": 1,
+        "max": 52,
+        "include_min": true,
+        "include_max": true,
+        "action": "nan"
+      }
+    },
+    "timestamp": "2026-11-17T12:34:03",
+    "rows_before": 20640,
+    "rows_after": 20640,
+    "affected_rows": 10,
+    "changed_cells": {
+      "HouseAge": 10
+    },
+    "added_columns": [],
+    "details": "1 ≤ HouseAge ≤ 52: naruszeń 10, akcja nan",
+    "reason": "Akcja nan: wartość fizycznie niemożliwa to błąd zapisu, więc traktujemy ją jak brak informacji i obsługujemy jak pozostałe braki, zamiast usuwać cały rekord."
+  },
+  {
+    "step": 5,
+    "operation": "apply_range_rule",
+    "params": {
+      "rule": {
+        "column": "AveRooms",
+        "min": 0,
+        "max": null,
+        "include_min": false,
+        "include_max": true,
+        "action": "nan"
+      }
+    },
+    "timestamp": "2026-11-17T12:34:03",
+    "rows_before": 20640,
+    "rows_after": 20640,
+    "affected_rows": 10,
+    "changed_cells": {
+      "AveRooms": 10
+    },
+    "added_columns": [],
+    "details": "0 < AveRooms: naruszeń 10, akcja nan",
+    "reason": "Akcja nan: wartość fizycznie niemożliwa to błąd zapisu, więc traktujemy ją jak brak informacji i obsługujemy jak pozostałe braki, zamiast usuwać cały rekord."
+  },
+  {
+    "step": 6,
+    "operation": "apply_range_rule",
+    "params": {
+      "rule": {
+        "column": "AveBedrms",
+        "min": 0,
+        "max": null,
+        "include_min": false,
+        "include_max": true,
+        "action": "nan"
+      }
+    },
+    "timestamp": "2026-11-17T12:34:03",
+    "rows_before": 20640,
+    "rows_after": 20640,
+    "affected_rows": 10,
+    "changed_cells": {
+      "AveBedrms": 10
+    },
+    "added_columns": [],
+    "details": "0 < AveBedrms: naruszeń 10, akcja nan",
+    "reason": "Akcja nan: wartość fizycznie niemożliwa to błąd zapisu, więc traktujemy ją jak brak informacji i obsługujemy jak pozostałe braki, zamiast usuwać cały rekord."
+  },
+  {
+    "step": 7,
+    "operation": "apply_range_rule",
+    "params": {
+      "rule": {
+        "column": "Population",
+        "min": 1,
+        "max": null,
+        "include_min": true,
+        "include_max": true,
+        "action": "nan"
+      }
+    },
+    "timestamp": "2026-11-17T12:34:03",
+    "rows_before": 20640,
+    "rows_after": 20640,
+    "affected_rows": 10,
+    "changed_cells": {
+      "Population": 10
+    },
+    "added_columns": [],
+    "details": "1 ≤ Population: naruszeń 10, akcja nan",
+    "reason": "Akcja nan: wartość fizycznie niemożliwa to błąd zapisu, więc traktujemy ją jak brak informacji i obsługujemy jak pozostałe braki, zamiast usuwać cały rekord."
+  },
+  {
+    "step": 8,
+    "operation": "apply_range_rule",
+    "params": {
+      "rule": {
+        "column": "AveOccup",
+        "min": 0,
+        "max": null,
+        "include_min": false,
+        "include_max": true,
+        "action": "nan"
+      }
+    },
+    "timestamp": "2026-11-17T12:34:03",
+    "rows_before": 20640,
+    "rows_after": 20640,
+    "affected_rows": 10,
+    "changed_cells": {
+      "AveOccup": 10
+    },
+    "added_columns": [],
+    "details": "0 < AveOccup: naruszeń 10, akcja nan",
+    "reason": "Akcja nan: wartość fizycznie niemożliwa to błąd zapisu, więc traktujemy ją jak brak informacji i obsługujemy jak pozostałe braki, zamiast usuwać cały rekord."
+  },
+  {
+    "step": 9,
+    "operation": "apply_range_rule",
+    "params": {
+      "rule": {
+        "column": "Latitude",
+        "min": 32.5,
+        "max": 42.0,
+        "include_min": true,
+        "include_max": true,
+        "action": "nan"
+      }
+    },
+    "timestamp": "2026-11-17T12:34:03",
+    "rows_before": 20640,
+    "rows_after": 20640,
+    "affected_rows": 10,
+    "changed_cells": {
+      "Latitude": 10
+    },
+    "added_columns": [],
+    "details": "32.5 ≤ Latitude ≤ 42: naruszeń 10, akcja nan",
+    "reason": "Akcja nan: wartość fizycznie niemożliwa to błąd zapisu, więc traktujemy ją jak brak informacji i obsługujemy jak pozostałe braki, zamiast usuwać cały rekord."
+  },
+  {
+    "step": 10,
+    "operation": "apply_range_rule",
+    "params": {
+      "rule": {
+        "column": "Longitude",
+        "min": -124.5,
+        "max": -114.1,
+        "include_min": true,
+        "include_max": true,
+        "action": "nan"
+      }
+    },
+    "timestamp": "2026-11-17T12:34:03",
+    "rows_before": 20640,
+    "rows_after": 20640,
+    "affected_rows": 10,
+    "changed_cells": {
+      "Longitude": 10
+    },
+    "added_columns": [],
+    "details": "-124.5 ≤ Longitude ≤ -114.1: naruszeń 10, akcja nan",
+    "reason": "Akcja nan: wartość fizycznie niemożliwa to błąd zapisu, więc traktujemy ją jak brak informacji i obsługujemy jak pozostałe braki, zamiast usuwać cały rekord."
+  },
+  {
+    "step": 11,
+    "operation": "apply_range_rule",
+    "params": {
+      "rule": {
+        "column": "MedHouseVal",
+        "min": 0,
+        "max": 5.00001,
+        "include_min": false,
+        "include_max": true,
+        "action": "nan"
+      }
+    },
+    "timestamp": "2026-11-17T12:34:03",
+    "rows_before": 20640,
+    "rows_after": 20640,
+    "affected_rows": 10,
+    "changed_cells": {
+      "MedHouseVal": 10
+    },
+    "added_columns": [],
+    "details": "0 < MedHouseVal ≤ 5.00001: naruszeń 10, akcja nan",
+    "reason": "Akcja nan: wartość fizycznie niemożliwa to błąd zapisu, więc traktujemy ją jak brak informacji i obsługujemy jak pozostałe braki, zamiast usuwać cały rekord."
+  },
+  {
+    "step": 12,
+    "operation": "drop_missing",
+    "params": {
+      "columns": [
+        "MedHouseVal",
+        "Latitude",
+        "Longitude"
+      ]
+    },
+    "timestamp": "2026-11-17T12:34:03",
+    "rows_before": 20640,
+    "rows_after": 20244,
+    "affected_rows": 396,
+    "changed_cells": {},
+    "added_columns": [],
+    "details": "kolumny: MedHouseVal, Latitude, Longitude; usunięto 396",
+    "reason": "Strategia 1, usunięcie: MedHouseVal to zmienna objaśniana (imputacja wymyśliłaby wynik), a uzupełnienie współrzędnych medianą przeniosłoby rekord w inne miejsce."
+  },
+  {
+    "step": 13,
+    "operation": "fill_missing",
+    "params": {
+      "column": "MedInc",
+      "strategy": "median"
+    },
+    "timestamp": "2026-11-17T12:34:03",
+    "rows_before": 20244,
+    "rows_after": 20244,
+    "affected_rows": 156,
+    "changed_cells": {
+      "MedInc": 156
+    },
+    "added_columns": [],
+    "details": "median = 3.5417; uzupełniono 156",
+    "reason": "Strategia 2, imputacja medianą: rozkłady są prawoskośne z wartościami odstającymi, a mediana jest na nie odporna (średnia nie)."
+  },
+  {
+    "step": 14,
+    "operation": "fill_missing",
+    "params": {
+      "column": "HouseAge",
+      "strategy": "median"
+    },
+    "timestamp": "2026-11-17T12:34:03",
+    "rows_before": 20244,
+    "rows_after": 20244,
+    "affected_rows": 136,
+    "changed_cells": {
+      "HouseAge": 136
+    },
+    "added_columns": [],
+    "details": "median = 29; uzupełniono 136",
+    "reason": "Strategia 2, imputacja medianą: rozkłady są prawoskośne z wartościami odstającymi, a mediana jest na nie odporna (średnia nie)."
+  },
+  {
+    "step": 15,
+    "operation": "fill_missing",
+    "params": {
+      "column": "AveRooms",
+      "strategy": "median"
+    },
+    "timestamp": "2026-11-17T12:34:03",
+    "rows_before": 20244,
+    "rows_after": 20244,
+    "affected_rows": 130,
+    "changed_cells": {
+      "AveRooms": 130
+    },
+    "added_columns": [],
+    "details": "median = 5.23333; uzupełniono 130",
+    "reason": "Strategia 2, imputacja medianą: rozkłady są prawoskośne z wartościami odstającymi, a mediana jest na nie odporna (średnia nie)."
+  },
+  {
+    "step": 16,
+    "operation": "fill_missing",
+    "params": {
+      "column": "AveBedrms",
+      "strategy": "median"
+    },
+    "timestamp": "2026-11-17T12:34:03",
+    "rows_before": 20244,
+    "rows_after": 20244,
+    "affected_rows": 130,
+    "changed_cells": {
+      "AveBedrms": 130
+    },
+    "added_columns": [],
+    "details": "median = 1.04863; uzupełniono 130",
+    "reason": "Strategia 2, imputacja medianą: rozkłady są prawoskośne z wartościami odstającymi, a mediana jest na nie odporna (średnia nie)."
+  },
+  {
+    "step": 17,
+    "operation": "fill_missing",
+    "params": {
+      "column": "Population",
+      "strategy": "median"
+    },
+    "timestamp": "2026-11-17T12:34:03",
+    "rows_before": 20244,
+    "rows_after": 20244,
+    "affected_rows": 136,
+    "changed_cells": {
+      "Population": 136
+    },
+    "added_columns": [],
+    "details": "median = 1167; uzupełniono 136",
+    "reason": "Strategia 2, imputacja medianą: rozkłady są prawoskośne z wartościami odstającymi, a mediana jest na nie odporna (średnia nie)."
+  },
+  {
+    "step": 18,
+    "operation": "fill_missing",
+    "params": {
+      "column": "AveOccup",
+      "strategy": "median"
+    },
+    "timestamp": "2026-11-17T12:34:03",
+    "rows_before": 20244,
+    "rows_after": 20244,
+    "affected_rows": 130,
+    "changed_cells": {
+      "AveOccup": 130
+    },
+    "added_columns": [],
+    "details": "median = 2.819; uzupełniono 130",
+    "reason": "Strategia 2, imputacja medianą: rozkłady są prawoskośne z wartościami odstającymi, a mediana jest na nie odporna (średnia nie)."
+  },
+  {
+    "step": 19,
+    "operation": "handle_outliers",
+    "params": {
+      "column": "MedInc",
+      "action": "flag",
+      "factor": 1.5
+    },
+    "timestamp": "2026-11-17T12:34:03",
+    "rows_before": 20244,
+    "rows_after": 20244,
+    "affected_rows": 682,
+    "changed_cells": {},
+    "added_columns": [
+      "MedInc_outlier"
+    ],
+    "details": "IQR x 1.5: granice [-0.6694, 7.979], wykryto 682, akcja flag",
+    "reason": "Wartości odstające (IQR x 1,5) tylko oznaczamy kolumną <nazwa>_outlier: w tych danych duże średnie pokoi czy mieszkańców bywają prawdziwe (ośrodki wypoczynkowe, akademiki), więc o usunięciu decyduje analiza, nie automat."
+  },
+  {
+    "step": 20,
+    "operation": "handle_outliers",
+    "params": {
+      "column": "AveRooms",
+      "action": "flag",
+      "factor": 1.5
+    },
+    "timestamp": "2026-11-17T12:34:03",
+    "rows_before": 20244,
+    "rows_after": 20244,
+    "affected_rows": 529,
+    "changed_cells": {},
+    "added_columns": [
+      "AveRooms_outlier"
+    ],
+    "details": "IQR x 1.5: granice [2.039, 8.46], wykryto 529, akcja flag",
+    "reason": "Wartości odstające (IQR x 1,5) tylko oznaczamy kolumną <nazwa>_outlier: w tych danych duże średnie pokoi czy mieszkańców bywają prawdziwe (ośrodki wypoczynkowe, akademiki), więc o usunięciu decyduje analiza, nie automat."
+  },
+  {
+    "step": 21,
+    "operation": "handle_outliers",
+    "params": {
+      "column": "AveBedrms",
+      "action": "flag",
+      "factor": 1.5
+    },
+    "timestamp": "2026-11-17T12:34:03",
+    "rows_before": 20244,
+    "rows_after": 20244,
+    "affected_rows": 1411,
+    "changed_cells": {},
+    "added_columns": [
+      "AveBedrms_outlier"
+    ],
+    "details": "IQR x 1.5: granice [0.8676, 1.238], wykryto 1411, akcja flag",
+    "reason": "Wartości odstające (IQR x 1,5) tylko oznaczamy kolumną <nazwa>_outlier: w tych danych duże średnie pokoi czy mieszkańców bywają prawdziwe (ośrodki wypoczynkowe, akademiki), więc o usunięciu decyduje analiza, nie automat."
+  },
+  {
+    "step": 22,
+    "operation": "handle_outliers",
+    "params": {
+      "column": "Population",
+      "action": "flag",
+      "factor": 1.5
+    },
+    "timestamp": "2026-11-17T12:34:03",
+    "rows_before": 20244,
+    "rows_after": 20244,
+    "affected_rows": 1190,
+    "changed_cells": {},
+    "added_columns": [
+      "Population_outlier"
+    ],
+    "details": "IQR x 1.5: granice [-605.5, 3118], wykryto 1190, akcja flag",
+    "reason": "Wartości odstające (IQR x 1,5) tylko oznaczamy kolumną <nazwa>_outlier: w tych danych duże średnie pokoi czy mieszkańców bywają prawdziwe (ośrodki wypoczynkowe, akademiki), więc o usunięciu decyduje analiza, nie automat."
+  },
+  {
+    "step": 23,
+    "operation": "handle_outliers",
+    "params": {
+      "column": "AveOccup",
+      "action": "flag",
+      "factor": 1.5
+    },
+    "timestamp": "2026-11-17T12:34:03",
+    "rows_before": 20244,
+    "rows_after": 20244,
+    "affected_rows": 739,
+    "changed_cells": {},
+    "added_columns": [
+      "AveOccup_outlier"
+    ],
+    "details": "IQR x 1.5: granice [1.17, 4.542], wykryto 739, akcja flag",
+    "reason": "Wartości odstające (IQR x 1,5) tylko oznaczamy kolumną <nazwa>_outlier: w tych danych duże średnie pokoi czy mieszkańców bywają prawdziwe (ośrodki wypoczynkowe, akademiki), więc o usunięciu decyduje analiza, nie automat."
+  }
+]

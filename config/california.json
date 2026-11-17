@@ -1,0 +1,42 @@
+{
+  "missing_tokens": ["", "?", "--", "brak", "nieznane", "error", "do sprawdzenia", "na", "n/a", "null"],
+  "range_rules": [
+    {"column": "MedInc", "min": 0, "include_min": false, "max": 15.0001, "action": "nan",
+     "reason": "Dochód w dziesiątkach tys. USD musi być dodatni; w źródle (California Housing) obcięty od góry na 15.0001, więc wyższa wartość nie może pochodzić z tego zbioru."},
+    {"column": "HouseAge", "min": 1, "max": 52, "action": "nan",
+     "reason": "Mediana wieku budynków w latach; w źródle obcięta na 52."},
+    {"column": "AveRooms", "min": 0, "include_min": false, "action": "nan",
+     "reason": "Średnia liczba pokoi na gospodarstwo musi być dodatnia."},
+    {"column": "AveBedrms", "min": 0, "include_min": false, "action": "nan",
+     "reason": "Średnia liczba sypialni musi być dodatnia."},
+    {"column": "Population", "min": 1, "action": "nan",
+     "reason": "Liczba mieszkańców grupy bloków: co najmniej 1."},
+    {"column": "AveOccup", "min": 0, "include_min": false, "action": "nan",
+     "reason": "Średnia liczba osób na gospodarstwo musi być dodatnia."},
+    {"column": "Latitude", "min": 32.5, "max": 42.0, "action": "nan",
+     "reason": "Kalifornia leży między 32,5° a 42,0° N."},
+    {"column": "Longitude", "min": -124.5, "max": -114.1, "action": "nan",
+     "reason": "Kalifornia leży między 124,5° a 114,1° W."},
+    {"column": "MedHouseVal", "min": 0, "include_min": false, "max": 5.00001, "action": "nan",
+     "reason": "Wartość domu w setkach tys. USD musi być dodatnia; w źródle obcięta na 5.00001."}
+  ],
+  "outliers": {
+    "factor": 1.5,
+    "columns": ["MedInc", "AveRooms", "AveBedrms", "Population", "AveOccup"]
+  },
+  "steps": [
+    {"op": "drop_duplicates",
+     "why": "Pełne duplikaty (identyczne wszystkie kolumny) to powtórzone rekordy; zostaje pierwsze wystąpienie. Robione na danych surowych, żeby nie scalać rekordów różniących się tylko zapisem braku."},
+    {"op": "missing_tokens",
+     "why": "Teksty typu '?', 'brak', 'error' w kolumnach liczbowych oznaczają brak wartości; zamiana na NaN pozwala potraktować kolumnę jako liczbową."},
+    {"op": "range_rules",
+     "why": "Akcja nan: wartość fizycznie niemożliwa to błąd zapisu, więc traktujemy ją jak brak informacji i obsługujemy jak pozostałe braki, zamiast usuwać cały rekord."},
+    {"op": "drop_missing", "params": {"columns": ["MedHouseVal", "Latitude", "Longitude"]},
+     "why": "Strategia 1, usunięcie: MedHouseVal to zmienna objaśniana (imputacja wymyśliłaby wynik), a uzupełnienie współrzędnych medianą przeniosłoby rekord w inne miejsce."},
+    {"op": "fill_missing",
+     "params": {"columns": ["MedInc", "HouseAge", "AveRooms", "AveBedrms", "Population", "AveOccup"], "strategy": "median"},
+     "why": "Strategia 2, imputacja medianą: rozkłady są prawoskośne z wartościami odstającymi, a mediana jest na nie odporna (średnia nie)."},
+    {"op": "outliers", "params": {"action": "flag"},
+     "why": "Wartości odstające (IQR x 1,5) tylko oznaczamy kolumną <nazwa>_outlier: w tych danych duże średnie pokoi czy mieszkańców bywają prawdziwe (ośrodki wypoczynkowe, akademiki), więc o usunięciu decyduje analiza, nie automat."}
+  ]
+}
