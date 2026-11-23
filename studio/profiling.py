@@ -75,6 +75,18 @@ def find_text_tokens(frame: pd.DataFrame) -> dict[str, dict[str, int]]:
     return found
 
 
+IDENTIFIER_NAMES = {"id", "lp", "nr", "index", "unnamed: 0"}
+
+
+def looks_like_identifier(column: object) -> bool:
+    """Kolumna z numerem rekordu (id, lp, klient_id, ...). Rozpoznawana tylko po nazwie.
+
+    Takie liczby niczego nie mierzą, więc automatycznie dobierane wykresy i analiza korelacji je pomijają.
+    """
+    name = str(column).strip().lower()
+    return name in IDENTIFIER_NAMES or name.endswith("_id") or name.startswith("id_")
+
+
 def numeric_like_columns(frame: pd.DataFrame) -> list[str]:
     """Kolumny liczbowe oraz liczbowe z tekstowymi wtrętami (np. w danych surowych)."""
     result = []
